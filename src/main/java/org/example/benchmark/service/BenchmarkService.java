@@ -1,9 +1,9 @@
 package org.example.benchmark.service;
 
-import com.ejemplo.benchmark.config.TaskExecutorConfig;
-import com.ejemplo.benchmark.model.BenchmarkResult;
-import com.ejemplo.benchmark.model.ModeResult;
-import com.ejemplo.benchmark.task.ComputationTask;
+import org.example.benchmark.config.TaskExecutorConfig;
+import org.example.benchmark.model.BenchmarkResult;
+import org.example.benchmark.model.ModeResult;
+import org.example.benchmark.task.ComputationTask;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Async;
@@ -20,7 +20,8 @@ import java.util.stream.IntStream;
 @Service
 public class BenchmarkService {
 
-    // Inyectamos el Executor de Spring para poder reconfigurarlo dinámicamente
+    // Inyección corregida: inyectamos ThreadPoolTaskExecutor, posible porque
+    // TaskExecutorConfig ahora devuelve este tipo específico.
     @Autowired
     @Qualifier(TaskExecutorConfig.ASYNC_EXECUTOR_NAME)
     private ThreadPoolTaskExecutor springTaskExecutor;
@@ -38,6 +39,7 @@ public class BenchmarkService {
             try {
                 new ComputationTask().call();
             } catch (Exception e) {
+                // Interrumpe el hilo actual en caso de error
                 Thread.currentThread().interrupt();
             }
         });
@@ -60,7 +62,7 @@ public class BenchmarkService {
 
         // Esperar (bloquear) por la finalización de CADA tarea
         for (Future<Boolean> future : futures) {
-            future.get();
+            future.get(); // Bloquea hasta que la tarea termine
         }
 
         Instant end = Instant.now();
@@ -70,11 +72,12 @@ public class BenchmarkService {
 
     /** MODO 3: Spring @Async */
     public long runSpringAsync(int totalTasks, int threads) throws InterruptedException, ExecutionException {
-        
+
         // **IMPORTANTE**: Reconfigurar el Executor de Spring con los hilos solicitados
         springTaskExecutor.setMaxPoolSize(threads);
         springTaskExecutor.setCorePoolSize(threads);
-        springTaskExecutor.initialize(); // Aplicar cambios
+        // Inicializar el ThreadPoolTaskExecutor con los nuevos tamaños de pool
+        springTaskExecutor.initialize();
 
         List<Future<Void>> futures = new ArrayList<>();
         Instant start = Instant.now();
@@ -111,7 +114,7 @@ public class BenchmarkService {
     // --- Lógica Principal ---
 
     public BenchmarkResult runBenchmark(int tasks, int threads) throws ExecutionException, InterruptedException {
-        
+
         // 1. Ejecutar y medir el modo secuencial (T_secuencial)
         long timeSequential = runSequential(tasks);
 
@@ -128,9 +131,9 @@ public class BenchmarkService {
 
         // 5. Ensamblar y almacenar el resultado final
         BenchmarkResult result = new BenchmarkResult(
-            tasks, 
-            threads, 
-            List.of(seqResult, execResult, asyncResult)
+                tasks,
+                threads,
+                List.of(seqResult, execResult, asyncResult)
         );
 
         this.lastResult = result;
@@ -141,14 +144,14 @@ public class BenchmarkService {
     private ModeResult calculateMetrics(String mode, long timeMs, long timeSequential, int threads) {
         // Evitar división por cero si T_concurrente fuera 0 (caso teórico)
         double speedup = (timeMs > 0) ? (double) timeSequential / timeMs : Double.POSITIVE_INFINITY;
-        
+
         // Eficiencia: Speedup / Número de hilos
         double efficiency = (threads > 0) ? speedup / threads : 0.0;
-        
+
         // Redondear las métricas a dos decimales para el JSON
         speedup = Math.round(speedup * 100.0) / 100.0;
         efficiency = Math.round(efficiency * 100.0) / 100.0;
-        
+
         return new ModeResult(mode, timeMs, speedup, efficiency);
     }
 

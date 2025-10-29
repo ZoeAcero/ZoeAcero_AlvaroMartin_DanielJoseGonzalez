@@ -1,7 +1,7 @@
 package org.example.benchmark.controller;
 
-import com.ejemplo.benchmark.model.BenchmarkResult;
-import com.ejemplo.benchmark.service.BenchmarkService;
+import org.example.benchmark.model.BenchmarkResult;
+import org.example.benchmark.service.BenchmarkService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
