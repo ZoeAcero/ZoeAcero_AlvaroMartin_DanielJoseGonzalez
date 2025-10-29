@@ -4,15 +4,13 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <!-- Define la versión base de Spring Boot (Parent POM) -->
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.2.0</version> <!-- Usamos una versión estable de la rama 3.x -->
-        <relativePath/> <!-- Busca el padre desde el repositorio -->
+        <version>3.2.0</version>
+        <relativePath/>
     </parent>
 
-    <!-- Usamos tu configuración actual de Grupo y Artefacto -->
     <groupId>org.example</groupId>
     <artifactId>ZoeAcero_AlvaroMartin_DanielJoseGonzalez</artifactId>
     <version>1.0-SNAPSHOT</version>
@@ -20,26 +18,23 @@
     <description>Benchmark de estrategias de concurrencia en Java con Spring Boot</description>
 
     <properties>
-        <java.version>21</java.version> <!-- Aseguramos Java 21 como has especificado -->
+        <java.version>21</java.version>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <dependencies>
-        <!-- 1. Spring Boot Starter Web: Para crear la aplicación REST (Endpoints y Tomcat) -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
-        <!-- 2. Spring Context: Incluye las herramientas de Scheduling y Asincronía (@EnableAsync, @Async) -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
         </dependency>
 
-        <!-- 3. Spring Boot Starter Test (Opcional, pero buena práctica) -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -49,7 +44,7 @@
 
     <build>
         <plugins>
-            <!-- Plugin para empaquetar y ejecutar la aplicación Spring Boot -->
+            <!-- ESTA SECCIÓN ES CRÍTICA PARA QUE SPRING BOOT SE EJECUTE -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>

@@ -11,7 +11,6 @@ import java.util.concurrent.Executor;
 public class TaskExecutorConfig {
 
     public static final String ASYNC_EXECUTOR_NAME = "springAsyncTaskExecutor";
-
     /**
      * Define y configura el Executor (ThreadPoolTaskExecutor) que Spring usará
      * para los métodos anotados con @Async.

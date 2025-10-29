@@ -4,7 +4,6 @@ import org.example.benchmark.config.TaskExecutorConfig;
 import org.example.benchmark.model.BenchmarkResult;
 import org.example.benchmark.model.ModeResult;
 import org.example.benchmark.task.ComputationTask;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncResult;
@@ -20,9 +19,8 @@ import java.util.stream.IntStream;
 @Service
 public class BenchmarkService {
 
-    // Inyección corregida: inyectamos ThreadPoolTaskExecutor, posible porque
-    // TaskExecutorConfig ahora devuelve este tipo específico.
-    @Autowired
+
+
     @Qualifier(TaskExecutorConfig.ASYNC_EXECUTOR_NAME)
     private ThreadPoolTaskExecutor springTaskExecutor;
 
