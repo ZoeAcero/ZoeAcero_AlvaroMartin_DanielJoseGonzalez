@@ -20,16 +20,17 @@ public class ComputationTask implements Callable<Boolean> {
     @Override
     public Boolean call() throws Exception {
         // Ejecución de la tarea CPU-intensiva
-        long target = 30000; // Un número suficientemente alto para consumir tiempo de CPU
+        // Se reduce el target a 15000 para evitar Timeouts (Error 500)
+        long target = 15000;
         int count = 0;
-        
+
         // Bucle que realiza el cálculo intensivo
         for (long i = 1; i <= target; i++) {
             if (isPrime(i)) {
                 count++;
             }
         }
-        
+
         // Devolvemos true, pero el resultado real es el tiempo consumido.
         return true;
     }
