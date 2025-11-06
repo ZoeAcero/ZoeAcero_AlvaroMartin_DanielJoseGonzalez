@@ -14,87 +14,47 @@ Desarrollar una herramienta de Benchmarking para medir la eficiencia y la aceler
 
 ⚙️ 2. Arquitectura y Tecnologías
 
-Componente
+Componente           Capa                  Clase(s) Clave
 
-Capa
+Backend              API / Servicio        BenchmarkController, BenchmarkService
 
-Clase(s) Clave
+Tareas               Modelo                ComputationTask (Cálculo de Primos)
 
-Backend
+Configuración        Spring                TaskExecutorConfig, BenchmarkApplication
 
-API / Servicio
+Frontend             Interfaz Web          index.html (HTML + Tailwind CSS + JavaScript)
 
-BenchmarkController, BenchmarkService
-
-Tareas
-
-Modelo
-
-ComputationTask (Cálculo de Primos)
-
-Configuración
-
-Spring
-
-TaskExecutorConfig, BenchmarkApplication
-
-Frontend
-
-Interfaz Web
-
-index.html (HTML + Tailwind CSS + JavaScript)
 
 2.1. Métricas de Rendimiento
 
-Métrica
+Tiempo Total: Tiempo total de ejecución de todas las tareas (en milisegundos).
 
-Fórmula
+Aceleración (Speedup): Indica cuántas veces más rápida es la ejecución paralela.
+Fórmula: $\text{Speedup} = \frac{\text{Tiempo Secuencial}}{\text{Tiempo Concurrente}}$
 
-Descripción
+Eficiencia: Mide el uso óptimo de los hilos. Valor ideal: cercano a 1.0 (100%).
+Fórmula: $\text{Eficiencia} = \frac{\text{Speedup}}{\text{Número de Hilos (P)}}$
 
-Tiempo Total
-
-T_concurrente
-
-Tiempo en milisegundos para completar todas las tareas.
-
-Aceleración (Speedup)
-
-$\frac{T_{\text{Secuencial}}}{T_{\text{Concurrente}}}$
-
-Factor de ganancia de velocidad respecto a la ejecución en un solo hilo.
-
-Eficiencia
-
-$\frac{\text{Speedup}}{\text{Número de Hilos (P)}}$
-
-Mide el uso óptimo de los hilos. Valor ideal: cercano a 1.0 (100%).
 
 🧪 3. Estrategias de Concurrencia
 
-Modo
+Modo SEQUENTIAL (Monohilo):
 
-Descripción
+Descripción: Ejecución de todas las tareas una tras otra en el hilo principal de la petición HTTP.
 
-Tipo de Implementación
+Uso de Hilos: 1 (Base de tiempo).
 
-SEQUENTIAL
+Modo EXECUTOR_SERVICE (Manual):
 
-Ejecución en el hilo principal de la petición HTTP.
+Descripción: Concurrencia gestionada manualmente usando un ExecutorService (FixedThreadPool).
 
-Monohilo, base de tiempo.
+Uso de Hilos: P (Hilos configurables).
 
-EXECUTOR_SERVICE
+Modo SPRING_ASYNC (Spring Idiomático):
 
-Uso manual de un ExecutorService (FixedThreadPool).
+Descripción: Utiliza el método anotado @Async, gestionado por el ThreadPoolTaskExecutor de Spring.
 
-Concurrencia explícita de Java.
-
-SPRING_ASYNC
-
-Uso del método anotado @Async, delegando la gestión del pool a ThreadPoolTaskExecutor de Spring.
-
-Concurrencia idiomática de Spring.
+Uso de Hilos: P (Hilos configurables).
 
 🛠️ 4. Guía de Ejecución (Paso a Paso)
 
