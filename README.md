@@ -12,91 +12,132 @@ El frontend (servido desde index.html) permite configurar la prueba y visualizar
 
 Desarrollar una herramienta de Benchmarking para medir la eficiencia y la aceleración obtenida al pasar de la ejecución monohilo a la concurrencia gestionada manualmente (ExecutorService) y la concurrencia asistida por el framework (@Async).
 
+
+
 ⚙️ 2. Arquitectura y Tecnologías
 
-Componente           Capa                  Clase(s) Clave
 
-Backend              API / Servicio        BenchmarkController, BenchmarkService
+Componente                         Capa                            Clase(s) Clave
 
-Tareas               Modelo                ComputationTask (Cálculo de Primos)
+Backend                            API / Servicio                  BenchmarkController, BenchmarkService
 
-Configuración        Spring                TaskExecutorConfig, BenchmarkApplication
+Tareas                             Modelo                          ComputationTask (Cálculo de Primos)
 
-Frontend             Interfaz Web          index.html (HTML + Tailwind CSS + JavaScript)
+Configuración                      Spring                          TaskExecutorConfig, BenchmarkApplication
+
+Frontend                           Interfaz Web                    index.html (HTML + Tailwind CSS + JavaScript)
+
+
 
 
 2.1. Métricas de Rendimiento
 
+
 Tiempo Total: Tiempo total de ejecución de todas las tareas (en milisegundos).
+
 
 Aceleración (Speedup): Indica cuántas veces más rápida es la ejecución paralela.
 Fórmula: $\text{Speedup} = \frac{\text{Tiempo Secuencial}}{\text{Tiempo Concurrente}}$
+
 
 Eficiencia: Mide el uso óptimo de los hilos. Valor ideal: cercano a 1.0 (100%).
 Fórmula: $\text{Eficiencia} = \frac{\text{Speedup}}{\text{Número de Hilos (P)}}$
 
 
+
 🧪 3. Estrategias de Concurrencia
+
+
 
 Modo SEQUENTIAL (Monohilo):
 
+
 Descripción: Ejecución de todas las tareas una tras otra en el hilo principal de la petición HTTP.
+
 
 Uso de Hilos: 1 (Base de tiempo).
 
+
 Modo EXECUTOR_SERVICE (Manual):
+
 
 Descripción: Concurrencia gestionada manualmente usando un ExecutorService (FixedThreadPool).
 
+
 Uso de Hilos: P (Hilos configurables).
 
+
+
 Modo SPRING_ASYNC (Spring Idiomático):
+
 
 Descripción: Utiliza el método anotado @Async, gestionado por el ThreadPoolTaskExecutor de Spring.
 
 Uso de Hilos: P (Hilos configurables).
 
+
+
 🛠️ 4. Guía de Ejecución (Paso a Paso)
 
+
 Para probar la aplicación, la máquina debe tener el JDK 21 (o superior) y Maven configurados.
+
+
 
 4.1. 📥 Compilación e Inicio del Backend
 
 Abre la terminal en la raíz del proyecto (donde está el pom.xml).
 
+
 Ejecuta el comando para compilar y descargar las dependencias:
+
 
 mvn clean install
 
 
 Ejecuta la aplicación Spring Boot (mantén la terminal abierta y corriendo):
 
+
 mvn spring-boot:run
+
 
 
 Nota: Si las variables de entorno de mvn no están configuradas, usa la ruta absoluta que ya verificamos: C:\Users\apache-maven-3.9.11-bin\apache-maven-3.9.11\bin\mvn.cmd spring-boot:run
 
 4.2. 💻 Acceso al Frontend
 
+
+
 Una vez que la aplicación muestre "Started BenchmarkApplication", abre tu navegador.
 
+
 Accede a la interfaz de control:
+
 
 http://localhost:8080/
 
 
+
+
 4.3. Prueba del Benchmark
+
 
 Introduce el Número de Tareas (N) (ej. 50) y los Hilos Máximos (P) (ej. 4).
 
+
 Haz clic en "Iniciar Benchmark" para que el frontend envíe la petición POST /start al servidor y visualice los resultados.
+
+
 
 🐛 5. Logros en la Estabilidad del Entorno
 
 Durante el desarrollo, se corrigieron problemas críticos de compatibilidad, asegurando la estabilidad del proyecto en cualquier entorno:
 
+
 Compatibilidad JDK/Spring: Se migró el entorno al JDK 21, necesario para las dependencias de Spring Boot 3.x.
 
+
 Resolución de Dependencias: Se resolvió el fallo de Runtime (Bean Not Found / Error 500) que impedía la inyección del pool de hilos de Spring, asegurando el escaneo correcto con @ComponentScan y la Inyección por Constructor.
+
 
 Estabilidad de la Prueba: Se redujo la carga de trabajo de la ComputationTask para evitar que la ejecución secuencial causara Timeouts del servidor HTTP.
