@@ -75,10 +75,7 @@ public class BenchmarkService {
 
     /** MODO 3: Spring @Async */
     public long runSpringAsync(int totalTasks, int threads) throws InterruptedException, ExecutionException {
-        // Reconfigurar el Executor de Spring con los hilos solicitados
-        springTaskExecutor.setMaxPoolSize(threads);
-        springTaskExecutor.setCorePoolSize(threads);
-        springTaskExecutor.initialize();
+
 
         List<Future<Void>> futures = new ArrayList<>();
         Instant start = Instant.now();
